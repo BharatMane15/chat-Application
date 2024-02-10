@@ -6,20 +6,12 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoute");
 const messageRoutes = require("./routes/messageRoute");
 const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
-const cors = require("cors");
+const path = require("path");
+
 dotenv.config();
 connectDB();
 
 const app = express();
-
-app.use(
-  cors({
-    origin: ["https://chat-application-kappa-one.vercel.app/"],
-
-    methods: ["POST", "GET"],
-    credentials: true,
-  })
-);
 
 app.use(express.json());
 
@@ -27,24 +19,25 @@ app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api is Rinning Successfully");
+  });
+}
+
 app.use(notFound);
 app.use(errorHandler);
 
 app.get("/", (req, res) => {
   res.send("APi is Rinning on the server");
 });
-
-// app.use("/api/user", userRoutes);
-
-// app.get("/api/chat", (req, res) => {
-//   res.send(chats);
-// });
-// app.get("/api/chat/:id", (req, res) => {
-//   const { params } = req;
-//   const data = chats.find((fillId) => fillId._id === params.id);
-//   return res.status(200).json({ data: data });
-// });
-
 const PORT = process.env.PORT;
 
 const server = app.listen(PORT || 5000);
@@ -52,7 +45,7 @@ const server = app.listen(PORT || 5000);
 const io = require("socket.io")(server, {
   pingTimeout: 6000,
   cors: {
-    origin: "https://chat-application-kappa-one.vercel.app/",
+    origin: "http://localhost:3000",
   },
 });
 
