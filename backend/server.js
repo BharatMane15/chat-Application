@@ -14,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://deploy-mern-1whq.vercel.app"],
+    origin: ["https://chat-application-peach-six.vercel.app/"],
     methods: ["POST", "GET"],
     credentials: true,
   })
@@ -51,7 +51,7 @@ const server = app.listen(PORT || 5000);
 const io = require("socket.io")(server, {
   pingTimeout: 6000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://chat-application-peach-six.vercel.app/",
   },
 });
 
