@@ -14,7 +14,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://chat-application-peach-six.vercel.app/"],
+    origin: ["https://chat-application-kappa-one.vercel.app/"],
+
     methods: ["POST", "GET"],
     credentials: true,
   })
@@ -51,7 +52,7 @@ const server = app.listen(PORT || 5000);
 const io = require("socket.io")(server, {
   pingTimeout: 6000,
   cors: {
-    origin: "https://chat-application-peach-six.vercel.app/",
+    origin: "https://chat-application-kappa-one.vercel.app/",
   },
 });
 
